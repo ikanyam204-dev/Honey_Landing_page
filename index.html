@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Honey Kinshasa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: five pages (Accueil, App, Pro, À propos, Contact). Home is a photo-led page: staggered arches, a pinned phone, salon cards, a bento mosaic and a slow ribbon of photos. Serif headlines echo the logo. Time words and the name Honey are honey-coloured. */
+:root{
+  --ink:#111111;
+  --cream:#F6EFEA;
+  --espresso:#522315;
+  --honey:#B87C52;
+  --honey-lt:#E2B48D;
+  --line:#E4D9D1;
+  --paper:#FFFFFF;
+  --muted:#6B6360;
+  --f-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --gutter:clamp(20px,5vw,64px);
+  --max:1240px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--honey);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
+h1,h2,h3{font-family:var(--f-display);font-weight:500;letter-spacing:-.02em;line-height:.98;text-wrap:balance}
+em{font-style:italic;font-weight:400;color:var(--honey)}
+.h{color:var(--honey);font-weight:inherit}
+.t{color:var(--honey);font-weight:600;text-decoration:underline;text-decoration-color:rgba(184,124,82,.45);text-decoration-thickness:2px;text-underline-offset:.22em}
+h1 .t,h2 .t,h3 .t{font-weight:500;font-style:italic}
+.dark .t,.dark .h,.foot .t,.foot .h{color:var(--honey-lt)}
+.dark .t,.foot .t{text-decoration-color:rgba(226,180,141,.5)}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--espresso)}
+.eyebrow::before{content:"";width:26px;height:1.5px;background:var(--honey)}
+.dark .eyebrow{color:var(--honey-lt)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:54px;padding:0 28px;border-radius:999px;font:600 15.5px var(--f-body);border:1.5px solid transparent;cursor:pointer;transition:transform .35s var(--ease),background .3s,color .3s,border-color .3s}
+.btn svg{width:18px;height:18px;transition:transform .35s var(--ease)}
+.btn:hover svg{transform:translateX(4px)}
+.btn-dark{background:var(--ink);color:#fff}.btn-dark:hover{background:var(--espresso)}
+.btn-line{border-color:var(--ink);color:var(--ink)}.btn-line:hover{background:var(--ink);color:#fff}
+.btn-light{background:#fff;color:var(--ink)}.btn-light:hover{background:var(--cream)}
+.btn-ghost{border-color:rgba(255,255,255,.7);color:#fff}.btn-ghost:hover{background:#fff;color:var(--ink)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.btn-sm{height:44px;padding:0 22px;font-size:14.5px}
+@media(max-width:480px){.nav .wrap{gap:8px}.logo{gap:8px}.logo svg{width:26px;height:26px}.logo span{font-size:24px}.nav-right{gap:8px}.btn-sm{height:40px;padding:0 14px;font-size:13px}.burger{width:42px;height:42px}}
+.btn-xl{height:64px;padding:0 40px;font-size:17px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+
+/* Nav */
+.nav{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.84);backdrop-filter:saturate(1.5) blur(16px);-webkit-backdrop-filter:saturate(1.5) blur(16px);border-bottom:1px solid transparent;transition:border-color .3s}
+.nav.scrolled{border-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px;gap:16px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo svg{width:32px;height:32px}
+.logo span{font:400 29px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase}
+.links{display:none;align-items:center;gap:36px;font-weight:500;font-size:14.5px}
+.links>a,.dd-btn{position:relative;padding:6px 0;color:var(--muted);transition:color .3s;background:none;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:500}
+.links>a:hover,.links>a.cur,.dd-btn:hover,.dd-btn.cur{color:var(--ink)}
+.links>a::after,.dd-btn::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.5px;background:var(--honey);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.links>a:hover::after,.links>a.cur::after,.dd-btn:hover::after,.dd-btn.cur::after{transform:scaleX(1)}
+.dd-btn svg{width:12px;height:12px;transition:transform .3s var(--ease)}
+.dd{position:relative}
+.dd.open .dd-btn svg{transform:rotate(180deg)}
+.dd-panel{position:absolute;left:50%;top:calc(100% + 14px);transform:translate(-50%,-6px);width:290px;background:#fff;border:1px solid var(--line);border-radius:22px;padding:8px;box-shadow:0 28px 60px -24px rgba(82,35,21,.3);opacity:0;visibility:hidden;transition:all .3s var(--ease)}
+.dd-panel::before{content:"";position:absolute;left:0;right:0;top:-16px;height:16px}
+.dd.open .dd-panel{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.dd-panel a{display:flex;flex-direction:column;gap:2px;padding:14px 16px;border-radius:14px;transition:background .25s}
+.dd-panel a:hover,.dd-panel a.cur{background:var(--cream)}
+.dd-panel b{font:500 25px/1 var(--f-display)}
+.dd-panel span{font-size:13.5px;color:var(--muted)}
+.burger{width:46px;height:46px;border-radius:50%;border:1.5px solid var(--line);background:#fff;display:grid;place-items:center;cursor:pointer}
+.burger i{display:block;width:18px;height:1.5px;background:var(--ink);position:relative;transition:background .2s}
+.burger i::before,.burger i::after{content:"";position:absolute;left:0;width:18px;height:1.5px;background:var(--ink);transition:transform .3s var(--ease)}
+.burger i::before{top:-6px}.burger i::after{top:6px}
+.burger[aria-expanded="true"] i{background:transparent}
+.burger[aria-expanded="true"] i::before{transform:translateY(6px) rotate(45deg)}
+.burger[aria-expanded="true"] i::after{transform:translateY(-6px) rotate(-45deg)}
+.menu{position:absolute;right:var(--gutter);top:66px;width:min(320px,calc(100vw - 2*var(--gutter)));background:#fff;border:1px solid var(--line);border-radius:22px;padding:10px;box-shadow:0 24px 60px -20px rgba(82,35,21,.25);opacity:0;visibility:hidden;transform:translateY(-8px);transition:all .3s var(--ease)}
+.menu.open{opacity:1;visibility:visible;transform:none}
+.menu a{display:block;padding:12px 18px;border-radius:14px;font-family:var(--f-display);font-size:28px;font-weight:500;line-height:1.1}
+.menu a:hover,.menu a.cur{background:var(--cream)}
+.menu .grp{padding:12px 18px 2px;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--honey)}
+.menu a.sub{padding-left:34px;font-size:25px}
+.menu a.sub small{display:block;font:500 13px var(--f-body);color:var(--muted);margin-top:2px}
+@media(min-width:900px){.links{display:flex}.burger,.menu{display:none}}
+
+/* Pages */
+.page{display:none}
+.page.active{display:block;animation:pagein .7s var(--ease)}
+@keyframes pagein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.seq{opacity:0;transform:translateY(20px);animation:rise 1s var(--ease) forwards;animation-delay:calc(var(--i)*120ms + 80ms)}
+@keyframes rise{to{opacity:1;transform:none}}
+.js .reveal.pre{opacity:0;transform:translateY(26px)}
+.reveal{transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--d,0ms)}
+.ph-img{border-radius:30px;overflow:hidden;background:var(--cream)}
+.ph-img img{width:100%;height:100%;object-fit:cover}
+
+/* Home hero */
+.hero{position:relative;padding:clamp(44px,7vw,92px) 0 0;text-align:center;overflow:hidden}
+.hero-mark{position:absolute;left:50%;top:-6%;width:min(760px,150vw);transform:translateX(-50%);color:var(--honey);opacity:.07;pointer-events:none;animation:slowspin 90s linear infinite}
+@keyframes slowspin{to{transform:translateX(-50%) rotate(360deg)}}
+.hero .wrap{position:relative}
+.hero h1{font-size:clamp(64px,15vw,196px);margin:20px auto 22px;max-width:8em;line-height:.9}
+.hero .lead{font-size:clamp(17px,2vw,21px);color:var(--muted);max-width:28em;margin:0 auto}
+.hero .cta-row{justify-content:center}
+
+/* Arches */
+.arches{position:relative;max-width:1320px;margin:clamp(36px,6vw,80px) auto 0;padding:0 var(--gutter) 40px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px;align-items:start}
+.arch{position:relative;border-radius:999px 999px 28px 28px;overflow:hidden;aspect-ratio:3/4.3;background:var(--cream);transform:translateY(calc(var(--off,0px) + var(--py,0px)));will-change:transform}
+.arch:nth-child(2n){--off:44px}
+.arch img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease)}
+.arch:hover img{transform:scale(1.06)}
+.arch:nth-child(5){display:none}
+@media(min-width:760px){
+  .arches{grid-template-columns:repeat(5,1fr);gap:18px;padding-bottom:70px}
+  .arch:nth-child(5){display:block}
+  .arch:nth-child(1){--off:30px}.arch:nth-child(2){--off:-10px}.arch:nth-child(3){--off:56px}.arch:nth-child(4){--off:0px}.arch:nth-child(5){--off:38px}
+}
+
+/* Lit statement */
+.lit-sec{padding:clamp(64px,9vw,130px) 0}
+.lit-sec p.lit{font-family:var(--f-display);font-size:clamp(34px,5.6vw,72px);line-height:1.06;letter-spacing:-.02em;max-width:18em;font-weight:500;text-wrap:balance}
+.js .lit .w{color:#B9B0AB;transition:color .5s var(--ease)}
+.js .lit .w.on{color:var(--ink)}
+.js .lit .t .w,.js .lit em .w,.js .lit .h .w{color:#B9B0AB}
+.js .lit .t .w.on,.js .lit em .w.on,.js .lit .h .w.on{color:var(--honey)}
+.dark .lit .w{color:rgba(255,255,255,.35)}
+.dark .lit .w.on{color:#fff}
+.dark .lit .t .w.on,.dark .lit .h .w.on,.dark .lit em .w.on{color:var(--honey-lt)}
+@media(prefers-reduced-motion:reduce){.js .lit .w{color:var(--ink)}.js .lit .t .w,.js .lit em .w,.js .lit .h .w{color:var(--honey)}}
+
+/* Story (pinned phone) */
+.story{height:300vh;background:var(--cream);position:relative}
+.stick{position:sticky;top:72px;height:calc(100vh - 72px);height:calc(100svh - 72px);display:grid;grid-template-rows:minmax(0,1fr) auto;gap:12px;align-items:center;padding:20px 0 28px}
+.story-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);gap:10px;height:100%;min-height:0}
+.story-text{display:grid;width:100%}
+.st{grid-area:1/1;opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease),transform .6s var(--ease);pointer-events:none}
+.st.on{opacity:1;transform:none;pointer-events:auto}
+.st .n{font-size:12.5px;font-weight:700;letter-spacing:.16em;color:var(--honey)}
+.st h2{font-size:clamp(46px,8vw,96px);margin:6px 0 10px}
+.st p{color:var(--muted);font-size:17px;max-width:26em}
+.prog{position:relative;z-index:1;display:flex;gap:8px;margin-top:6px}
+.prog i{height:3px;width:34px;border-radius:2px;background:var(--line);overflow:hidden;position:relative}
+.prog i::after{content:"";position:absolute;inset:0;background:var(--ink);transform:scaleX(var(--p,0));transform-origin:left}
+.pw-slot{min-height:0;height:100%;width:100%;display:flex;align-items:center;justify-content:center}
+.phone-wrap{flex:none;width:calc(276px*var(--s,1));height:calc(560px*var(--s,1))}
+.phone-wrap .phone{transform:scale(var(--s,1));transform-origin:top left}
+@media(min-width:900px){
+  .stick{grid-template-rows:1fr;padding:0}
+  .story-grid{grid-template-columns:1fr 1fr;grid-template-rows:1fr;gap:60px;align-items:center}
+  .story-text{align-self:center}
+}
+@media(max-width:899px) and (orientation:landscape) and (max-height:600px){
+  .stick{padding:0}
+  .story-grid{grid-template-columns:1fr 1fr;grid-template-rows:1fr;align-items:center;gap:24px}
+  .st h2{font-size:42px}
+}
+.marks{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.marks svg{position:absolute;color:var(--honey);opacity:.1;animation:drift 14s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translateY(0) rotate(0)}to{transform:translateY(-12px) rotate(14deg)}}
+
+/* Phone */
+.phone{position:relative;width:276px;height:560px;flex:none;background:#fff;color:var(--ink);border:9px solid #0c0c0c;border-radius:46px;overflow:hidden;box-shadow:0 0 0 2px #d6c9bf,0 40px 80px -30px rgba(82,35,21,.5)}
+.phone .notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:34%;height:22px;border-radius:99px;background:#0c0c0c;z-index:5}
+.ph-top{display:flex;justify-content:space-between;font-size:11px;font-weight:600;padding:0 6px}
+.scr{position:absolute;inset:0;padding:38px 14px 14px;background:#fff}
+.story .scr{opacity:0;transform:scale(.97);transition:opacity .5s var(--ease),transform .6s var(--ease)}
+.story .scr.on{opacity:1;transform:none}
+.scr-h{font-family:var(--f-display);font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1;margin:12px 0 8px}
+.cats{display:flex;gap:5px;margin-bottom:10px}
+.cats span{font-size:9.5px;font-weight:600;padding:5px 9px;border-radius:99px;border:1px solid var(--line)}
+.cats span.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.row{display:flex;gap:9px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:7px;margin-bottom:7px}
+.row img{width:46px;height:46px;border-radius:10px;object-fit:cover;flex:none}
+.row b{display:block;font-size:11.5px;line-height:1.2}
+.row small{font-size:9.5px;color:var(--muted)}
+.row .nt{margin-left:auto;font-size:10px;font-weight:700;background:var(--cream);padding:4px 7px;border-radius:99px;white-space:nowrap}
+.cover{height:30%;border-radius:14px;overflow:hidden;margin-bottom:9px}
+.cover img{width:100%;height:100%;object-fit:cover}
+.slots{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}
+.slots span{font-size:10.5px;font-weight:600;padding:7px 10px;border-radius:10px;border:1px solid rgba(184,124,82,.5);color:var(--honey);font-variant-numeric:tabular-nums}
+.slots span.on{background:var(--honey);color:#fff;border-color:var(--honey)}
+.pbtn{margin-top:10px;background:var(--ink);color:#fff;text-align:center;font-weight:600;font-size:12px;padding:11px;border-radius:99px}
+.credit{background:var(--ink);color:#fff;border-radius:16px;padding:16px;margin-top:12px}
+.credit small{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--honey-lt)}
+.credit b{display:block;font-size:34px;letter-spacing:-.04em;line-height:1.1}
+.note{background:var(--cream);border-radius:12px;padding:11px 12px;font-size:11px;font-weight:500;margin-top:9px;line-height:1.3}
+.note.ok2{display:flex;gap:8px;align-items:center}
+.note .tm{color:var(--honey);font-weight:700}
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.mini div{border:1px solid var(--line);border-radius:12px;padding:10px;font-size:10.5px;min-height:70px;display:flex;align-items:flex-end}
+.tabbar{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);background:#fff;padding:8px 6px 10px;font-size:8.5px;text-align:center;color:var(--muted);font-weight:600}
+.tabbar span.on{background:var(--cream);border-radius:10px;color:var(--ink);padding:6px 0}
+.tabbar span{padding:6px 0}
+
+/* Members */
+.members{padding:clamp(64px,9vw,130px) 0}
+.m-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:24px;margin-bottom:36px}
+.m-head h2{font-size:clamp(44px,7.4vw,96px);max-width:10em}
+.arrows{display:flex;gap:10px}
+.arrows button{width:52px;height:52px;border-radius:50%;border:1.5px solid var(--line);background:#fff;cursor:pointer;display:grid;place-items:center;transition:background .3s,border-color .3s,color .3s}
+.arrows button:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+.arrows svg{width:20px;height:20px}
+.track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 var(--gutter) 8px;scrollbar-width:none;scroll-padding:0 var(--gutter)}
+.track::-webkit-scrollbar{display:none}
+.card{flex:0 0 min(82vw,440px);min-width:0;aspect-ratio:4/4.6;border-radius:30px;overflow:hidden;position:relative;scroll-snap-align:start;background:var(--cream);color:#fff;isolation:isolate}
+.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform 1.2s var(--ease)}
+.card::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(17,17,17,0) 50%,rgba(17,17,17,.78))}
+.card:hover img{transform:scale(1.05)}
+.card .info{position:absolute;left:22px;right:22px;bottom:22px;display:flex;align-items:end;justify-content:space-between;gap:12px}
+.card h3{font-size:38px;line-height:1}
+.card small{display:block;opacity:.88;margin-top:6px;font-size:14.5px}
+.card.join{background:var(--espresso);display:flex;align-items:center;padding:30px}
+.card.join::after{display:none}
+.card.join h3{font-size:44px;margin-bottom:16px}
+.card.join p{opacity:.8;margin-bottom:24px}
+
+/* Mosaic */
+.mosaic-s{padding:0 0 clamp(64px,9vw,130px)}
+.mosaic-h{margin-bottom:clamp(28px,4vw,48px)}
+.mosaic-h h2{font-size:clamp(44px,7.4vw,96px);margin-top:16px;max-width:11em}
+.mosaic{display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:150px;gap:12px}
+.tile{position:relative;border-radius:26px;overflow:hidden;background:var(--cream);isolation:isolate;color:#fff}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform 1.4s var(--ease)}
+.tile::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(17,17,17,0) 55%,rgba(17,17,17,.6))}
+.tile:hover img{transform:scale(1.06)}
+.tile span{position:absolute;left:16px;bottom:14px;font:500 26px/1 var(--f-display)}
+.tile.arc{border-radius:999px 999px 26px 26px}
+.t1{grid-column:1/3;grid-row:1/4}
+.t2{grid-column:1/2;grid-row:4/7}
+.t3{grid-column:2/3;grid-row:4/6}
+.t4{grid-column:2/3;grid-row:6/8}
+.t5{grid-column:1/2;grid-row:7/9}
+.t6{grid-column:2/3;grid-row:8/10}
+.t7{grid-column:1/2;grid-row:9/10}
+@media(min-width:800px){
+  .mosaic{grid-template-columns:repeat(12,1fr);grid-auto-rows:118px;gap:16px}
+  .t1{grid-column:1/6;grid-row:1/6}
+  .t2{grid-column:6/9;grid-row:1/4}
+  .t3{grid-column:9/13;grid-row:1/4}
+  .t4{grid-column:6/9;grid-row:4/8}
+  .t5{grid-column:9/13;grid-row:4/8}
+  .t6{grid-column:1/6;grid-row:6/8}
+  .t7{display:none}
+}
+
+/* Ribbon */
+.ribbon{overflow:hidden;padding:0 0 clamp(64px,9vw,120px);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.ribbon-track{display:flex;gap:14px;width:max-content;animation:marq 70s linear infinite}
+.ribbon:hover .ribbon-track{animation-play-state:paused}
+.ribbon img{height:clamp(190px,24vw,300px);width:auto;border-radius:24px;aspect-ratio:3/4;object-fit:cover}
+.ribbon img:nth-child(even){margin-top:34px;height:clamp(170px,21vw,260px)}
+@keyframes marq{to{transform:translateX(calc(-50% - 7px))}}
+
+/* Page heroes (App / Pro / About / Contact) */
+.p-hero{padding:clamp(44px,7vw,96px) 0 clamp(56px,8vw,110px)}
+.p-grid{display:grid;gap:48px;align-items:center}
+.p-hero h1{font-size:clamp(54px,10vw,132px);margin:18px 0 20px}
+.p-hero p.l{font-size:19px;color:var(--muted);max-width:27em}
+.stage{position:relative;display:flex;justify-content:center;padding:20px 0}
+.stage .phone{z-index:2}
+.bubble{position:absolute;z-index:3;border-radius:50%;overflow:hidden;border:5px solid #fff;box-shadow:0 20px 40px -18px rgba(0,0,0,.35);animation:bob 7s ease-in-out infinite alternate}
+.bubble img{width:100%;height:100%;object-fit:cover}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-14px)}}
+.b1{width:120px;height:120px;left:max(0px,calc(50% - 230px));top:40px}
+.b2{width:96px;height:96px;right:max(0px,calc(50% - 220px));top:250px;animation-delay:-3s}
+.b3{width:130px;height:130px;left:max(0px,calc(50% - 215px));bottom:30px;animation-delay:-5s}
+@media(min-width:900px){.p-grid{grid-template-columns:1.05fr .95fr;gap:72px}}
+
+.feat{padding:clamp(64px,9vw,120px) 0;background:var(--cream)}
+.feat-h{margin-bottom:clamp(30px,5vw,56px)}
+.feat-h h2{font-size:clamp(42px,6.6vw,88px);margin-top:16px;max-width:12em}
+.feats{display:grid;gap:18px}
+.f{background:#fff;border:1px solid var(--line);border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:46px;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.f:hover{transform:translateY(-6px);box-shadow:0 30px 60px -34px rgba(82,35,21,.45)}
+.f .n{font-size:12.5px;font-weight:700;letter-spacing:.16em;color:var(--honey)}
+.f h3{font-size:44px;margin-bottom:8px}
+.f p{color:var(--muted)}
+@media(min-width:800px){.feats{grid-template-columns:repeat(3,1fr)}}
+
+.duo-img{display:grid;gap:14px;padding:clamp(48px,7vw,100px) 0}
+.duo-img .ph-img{aspect-ratio:4/3}
+@media(min-width:800px){.duo-img{grid-template-columns:1.3fr 1fr}.duo-img .ph-img:last-child{aspect-ratio:auto}}
+
+/* Pro */
+.pro{background:var(--espresso);color:#fff;padding:clamp(64px,9vw,130px) 0;overflow:hidden}
+.pro h1{font-size:clamp(54px,9.6vw,128px);margin:18px 0 20px}
+.pro h1 em{color:var(--honey-lt)}
+.pro p.l{color:rgba(255,255,255,.78);font-size:18.5px;max-width:28em}
+.net{display:inline-flex;align-items:center;gap:14px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:8px 8px 8px 22px;font-weight:600;cursor:pointer;background:transparent;transition:background .3s;height:54px}
+.net:hover{background:rgba(255,255,255,.08)}
+.net .sw{width:52px;height:30px;border-radius:99px;background:#7BC47F;position:relative;transition:background .3s}
+.net .sw::after{content:"";position:absolute;top:3px;left:25px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .35s var(--ease)}
+.net[aria-pressed="true"] .sw{background:#8a6a5c}
+.net[aria-pressed="true"] .sw::after{left:3px}
+.pro .phone{border-color:#000;box-shadow:0 0 0 2px #7b4a37,0 50px 90px -30px rgba(0,0,0,.6)}
+.off{position:absolute;left:12px;right:12px;top:40px;z-index:4;background:var(--ink);color:#fff;border-radius:14px;padding:10px 12px;font-size:10.5px;font-weight:600;transform:translateY(-70px);opacity:0;transition:all .5s var(--ease)}
+.phone.offline .off{transform:none;opacity:1}
+.agenda{padding:56px 14px 14px;height:100%}
+.phone.offline .agenda{filter:saturate(.7)}
+.brand-row{display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:600;color:var(--muted)}
+.brand-row .lg{display:flex;align-items:center;gap:6px;color:var(--ink);font:500 14px var(--f-display);letter-spacing:.08em;text-transform:uppercase}
+.brand-row .lg svg{width:15px;height:15px}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin:9px 0}
+.days span{border:1px solid var(--line);border-radius:7px;text-align:center;font-size:7.5px;padding:5px 0;font-weight:600;color:var(--muted)}
+.days span b{display:block;font-size:12.5px;color:var(--ink)}
+.days span.on{background:var(--ink);border-color:var(--ink);color:#fff}.days span.on b{color:#fff}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.kpi div{border:1px solid var(--line);border-radius:10px;padding:8px;font-size:7.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.kpi div b{display:block;font-size:14px;letter-spacing:-.02em;color:var(--ink);text-transform:none;margin-top:2px;font-variant-numeric:tabular-nums}
+.appt{display:flex;gap:9px;align-items:center;border-left:3px solid var(--honey);background:var(--cream);border-radius:4px 10px 10px 4px;padding:7px 9px;margin-bottom:6px;color:var(--ink)}
+.appt time{font-size:10px;font-weight:700;width:34px;font-variant-numeric:tabular-nums;color:var(--honey)}
+.appt b{display:block;font-size:10.5px;line-height:1.2}
+.appt small{font-size:9px;color:var(--muted)}
+
+.join-s{padding:clamp(64px,9vw,120px) 0}
+.two{display:grid;gap:40px}
+.two h2{font-size:clamp(44px,6.4vw,84px);margin:16px 0 18px}
+.two p{color:var(--muted);max-width:26em}
+form{background:#fff;border:1px solid var(--line);border-radius:30px;padding:clamp(22px,4vw,44px);display:grid;gap:20px}
+label{display:grid;gap:8px;font-weight:600;font-size:14.5px}
+input,textarea{font:400 16.5px var(--f-body);border:1px solid var(--line);border-radius:16px;padding:0 18px;background:#fff;color:var(--ink);transition:border-color .25s,box-shadow .25s;width:100%}
+input{height:56px}
+textarea{padding:16px 18px;min-height:140px;resize:vertical}
+input::placeholder,textarea::placeholder{color:#A39B97}
+input:focus,textarea:focus{outline:none;border-color:var(--honey);box-shadow:0 0 0 4px rgba(184,124,82,.18)}
+.row2{display:grid;gap:20px}
+.okmsg{display:none;background:var(--cream);border-radius:16px;padding:16px 18px;font-weight:500;color:var(--espresso)}
+.okmsg.show{display:block}
+.okmsg.err{background:#FBEAE8;color:#8A1F17}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.opt{font-weight:500;color:var(--muted)}
+@media(min-width:900px){.two{grid-template-columns:.85fr 1.15fr;gap:80px;align-items:start}.row2{grid-template-columns:1fr 1fr}}
+.launch{background:var(--ink);color:#fff;text-align:center;padding:clamp(80px,11vw,150px) 0}
+.launch h2{font-size:clamp(48px,9vw,120px);max-width:9em;margin:0 auto 18px}
+.launch h2 em{color:var(--honey-lt)}
+.launch p{color:rgba(255,255,255,.66);max-width:26em;margin:0 auto 34px}
+
+/* About */
+.about-h{background:var(--cream);padding:clamp(60px,9vw,130px) 0 clamp(48px,7vw,90px)}
+.about-h h1{font-size:clamp(54px,10vw,140px);margin:18px 0 0;max-width:9.5em}
+.story-b{padding:clamp(56px,8vw,110px) 0}
+.story-b .two p{max-width:30em;font-size:18px;margin-bottom:16px}
+.story-b .ph-img{aspect-ratio:4/4.6}
+.goals{background:var(--cream);padding:clamp(64px,9vw,130px) 0}
+.goals h2{font-size:clamp(44px,7vw,96px);margin:16px 0 clamp(30px,5vw,60px);max-width:10em}
+.goal-grid{display:grid;gap:30px}
+.goal{border-top:1.5px solid var(--ink);padding-top:18px}
+.goal .n{font-size:12.5px;font-weight:700;letter-spacing:.16em;color:var(--honey)}
+.goal h3{font-size:40px;margin:6px 0 8px}
+.goal p{color:var(--muted)}
+@media(min-width:800px){.goal-grid{grid-template-columns:repeat(3,1fr);gap:48px}}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:clamp(48px,7vw,100px) 0}
+.strip .ph-img{aspect-ratio:3/4}
+.strip .ph-img:nth-child(2){margin-top:30px}
+
+/* Contact */
+.c-hero{padding:clamp(48px,7vw,100px) 0 clamp(8px,2vw,24px)}
+.c-hero h1{font-size:clamp(54px,10vw,132px);margin:18px 0 0;max-width:9em}
+.faq{padding:clamp(40px,6vw,90px) 0}
+.faq h2{font-size:clamp(40px,6vw,76px);margin:16px 0 28px}
+.faq details{border-top:1px solid var(--line);padding:6px 0}
+.faq details:last-child{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:18px 0;font:500 28px/1.1 var(--f-display)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font:300 34px/1 var(--f-body);color:var(--honey);transition:transform .35s var(--ease)}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{color:var(--muted);max-width:36em;padding:0 0 22px}
+.c-form{padding:0 0 clamp(64px,9vw,120px)}
+
+
+/* faint background logos */
+.has-marks{position:relative;overflow:hidden}
+.has-marks>.wrap{position:relative;z-index:1}
+.has-marks>.marks{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.dark .marks svg{color:var(--honey-lt)}
+.foot-mark{position:absolute;left:50%;top:6%;width:min(900px,170vw);transform:translateX(-50%);color:var(--honey-lt);opacity:.06;pointer-events:none;animation:slowspin 120s linear infinite}
+.foot .wrap{position:relative;z-index:1}
+
+/* Footer */
+.foot{background:var(--ink);color:#fff;padding:clamp(56px,8vw,96px) 0 0;overflow:hidden;position:relative}
+.foot-top{display:grid;gap:44px}
+.foot .logo svg{color:#fff}
+.foot-tag{font-family:var(--f-display);font-size:clamp(32px,4.2vw,50px);line-height:1.05;margin-top:22px;max-width:12em;letter-spacing:-.01em}
+.foot-sub{color:rgba(255,255,255,.55);margin-top:14px;max-width:26em;font-size:15px}
+.cols{display:grid;grid-template-columns:repeat(2,1fr);gap:34px 24px}
+.col h4{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--honey-lt);font-weight:700;margin-bottom:16px}
+.col a{display:block;padding:5px 0;color:rgba(255,255,255,.82);font-weight:500;transition:color .25s,transform .3s var(--ease)}
+.col a:hover{color:#fff;transform:translateX(4px)}
+.foot-legal{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:clamp(40px,6vw,72px);padding-top:26px;border-top:1px solid rgba(255,255,255,.14);font-size:14px;color:rgba(255,255,255,.55)}
+.foot-legal a:hover{color:#fff}
+.foot-base{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;margin-top:20px;font-size:13.5px;color:rgba(255,255,255,.45)}
+.wordmark{position:relative;z-index:1;font-family:var(--f-display);font-weight:500;text-transform:uppercase;letter-spacing:.06em;line-height:.8;font-size:clamp(90px,26vw,360px);text-align:center;margin-top:clamp(28px,4vw,56px);margin-bottom:-.12em;background:linear-gradient(180deg,rgba(226,180,141,.38),rgba(226,180,141,0) 85%);-webkit-background-clip:text;background-clip:text;color:transparent;user-select:none;pointer-events:none}
+@media(min-width:900px){.foot-top{grid-template-columns:1.1fr 1fr;gap:80px}.cols{grid-template-columns:repeat(2,1fr);max-width:420px;justify-self:end}}
+
+@media(min-width:1600px){:root{--max:1400px}body{font-size:17.5px}}
+@media(max-width:380px){.logo span{font-size:25px}.btn{padding:0 22px}}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .seq{opacity:1;transform:none}.js .reveal.pre{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 40 40"><g fill="currentColor">
+    <circle cx="20" cy="20" r="3.2"/>
+    <path id="pt" d="M20 2c2.4 3 2.4 7.5 0 11-2.4-3.5-2.4-8 0-11z"/>
+    <use href="#pt" transform="rotate(45 20 20)"/><use href="#pt" transform="rotate(90 20 20)"/><use href="#pt" transform="rotate(135 20 20)"/>
+    <use href="#pt" transform="rotate(180 20 20)"/><use href="#pt" transform="rotate(225 20 20)"/><use href="#pt" transform="rotate(270 20 20)"/><use href="#pt" transform="rotate(315 20 20)"/>
+  </g></symbol>
+  <symbol id="arrow" viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="left" viewBox="0 0 24 24"><path d="M20 12H4M10 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="chev" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#accueil" aria-label="Honey, accueil"><svg><use href="#mark"/></svg><span>Honey</span></a>
+    <nav class="links" aria-label="Navigation principale">
+      <a href="#accueil">Accueil</a>
+      <div class="dd" id="dd">
+        <button class="dd-btn" id="ddBtn" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="ddPanel">Options <svg><use href="#chev"/></svg></button>
+        <div class="dd-panel" id="ddPanel">
+          <a href="#app"><b>App</b><span>Pour toi, côté client</span></a>
+          <a href="#pro"><b>Pro</b><span>Pour ton institut</span></a>
+        </div>
+      </div>
+      <a href="#apropos">À propos</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-right"><a class="btn btn-dark btn-sm nav-cta" href="https://honey-client.vercel.app" target="_blank" rel="noopener">Découvrir l'app</a>
+    <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu"><i></i></button></div>
+  </div>
+  <div class="menu" id="menu">
+    <a href="#accueil">Accueil</a>
+    <div class="grp">Options</div>
+    <a class="sub" href="#app">App<small>Pour toi, côté client</small></a>
+    <a class="sub" href="#pro">Pro<small>Pour ton institut</small></a>
+    <a href="#apropos">À propos</a>
+    <a href="#contact">Contact</a>
+  </div>
+</header>
+
+<main>
+
+<!-- ACCUEIL -->
+<section class="page active" data-page="accueil" id="p-accueil">
+  <div class="hero">
+    <svg class="hero-mark" viewBox="0 0 40 40" aria-hidden="true"><use href="#mark"/></svg>
+    <div class="wrap">
+      <span class="eyebrow seq" style="--i:0">La beauté à Kinshasa</span>
+      <h1 class="seq" style="--i:1">Prends soin <em>de toi.</em></h1>
+      <p class="lead seq" style="--i:2">Les meilleurs instituts de Kinshasa, avec leurs prix, leurs avis et ton <span class="t">prochain créneau libre</span>. Avec <span class="h">Honey</span>, tu gagnes un <span class="t">temps</span> précieux.</p>
+      <div class="cta-row seq" style="--i:3;justify-content:center">
+        <a class="btn btn-dark" href="https://honey-client.vercel.app" target="_blank" rel="noopener">Découvrir l'app <svg><use href="#arrow"/></svg></a>
+        <a class="btn btn-line" href="https://honey-pro-ten.vercel.app/connexion" target="_blank" rel="noopener">Je suis un institut</a>
+      </div>
+    </div>
+    <div class="arches seq" style="--i:4" id="arches">
+      <figure class="arch" data-speed=".05"><img src="img/orange.jpg" alt="Tresses longues, fond orange" width="900" height="1110"></figure>
+      <figure class="arch" data-speed=".09"><img src="img/clipper.jpg" alt="Dégradé à la tondeuse" width="900" height="1095" style="object-position:30% 50%"></figure>
+      <figure class="arch" data-speed=".03"><img src="img/shampoo.jpg" alt="Shampoing en institut" width="900" height="900"></figure>
+      <figure class="arch" data-speed=".08"><img src="img/pink.jpg" alt="Cheveux longs ondulés" width="900" height="1184"></figure>
+      <figure class="arch" data-speed=".05"><img src="img/bob.jpg" alt="Carré lisse noir" width="486" height="876"></figure>
+    </div>
+  </div>
+
+  <div class="lit-sec"><div class="wrap"><p class="lit"><span class="h">Honey</span> réunit les instituts de beauté de Kinshasa au même endroit, pour que tu trouves le bon, au bon prix, et que tu réserves en <span class="t">quelques secondes</span>.</p></div></div>
+
+  <div class="story" id="story" aria-label="Comment fonctionne Honey">
+    <div class="stick">
+      <div class="marks" id="marks" aria-hidden="true"></div>
+      <div class="wrap story-grid">
+        <div class="story-text">
+          <div class="st on" data-i="0"><span class="n">01</span><h2>Découvre.</h2><p>Parcours les instituts par catégorie : coiffure, esthétique, manucure.</p></div>
+          <div class="st" data-i="1"><span class="n">02</span><h2>Compare.</h2><p>Prix en FC, avis et <span class="t">prochains créneaux libres</span>, côte à côte.</p></div>
+          <div class="st" data-i="2"><span class="n">03</span><h2>Réserve <span class="t">vite.</span></h2><p>Choisis ton <span class="t">heure</span> : c'est fait en <span class="t">quelques secondes</span>. Ensuite, profite de ta journée.</p></div>
+        </div>
+        <div class="pw-slot" id="pwSlot"><div class="phone-wrap">
+          <div class="phone" aria-hidden="true">
+            <div class="notch"></div>
+            <div class="scr on" data-i="0">
+              <div class="ph-top"><span>9:41</span><span></span></div>
+              <div class="scr-h">Prends soin de toi.</div>
+              <div class="cats"><span class="on">Tous</span><span>Coiffure</span><span>Esthétique</span><span>Manucure</span></div>
+              <div class="row"><img src="img/salon-prestige.jpg" alt=""><div><b>Salon Prestige</b><small>Kinshasa</small></div></div>
+              <div class="row"><img src="img/beaute-ngaliema.jpg" alt=""><div><b>Beauté Ngaliema</b><small>Ngaliema</small></div></div>
+              <div class="row"><img src="img/salon-jumeaux.jpg" alt=""><div><b>Salon les jumeaux</b><small>Kinshasa</small></div></div>
+            </div>
+            <div class="scr" data-i="1">
+              <div class="ph-top"><span>9:41</span><span></span></div>
+              <div class="cover"><img src="img/salon-prestige.jpg" alt=""></div>
+              <div class="scr-h" style="margin-top:0">Salon Prestige</div>
+              <div style="font-size:10px;color:var(--muted)">Kinshasa</div>
+              <div style="font-size:10px;font-weight:700;margin-top:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--honey)">Aujourd'hui</div>
+              <div class="slots"><span>11:30</span><span class="on">14:00</span><span>15:30</span><span>17:00</span></div>
+              <div class="pbtn">Réserver à 14:00</div>
+            </div>
+            <div class="scr" data-i="2">
+              <div class="ph-top"><span>9:41</span><span></span></div>
+              <div class="scr-h">Profil</div>
+              <div class="credit"><small>Crédit Honey</small><b>2250 FC</b></div>
+              <div class="note">Tes réservations offertes sont utilisées</div>
+              <div class="note ok2"><span class="tm">✓</span> Rendez-vous confirmé à <span class="tm">14:00</span></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+      <div class="wrap"><div class="prog" id="prog"><i></i><i></i><i></i></div></div>
+    </div>
+  </div>
+
+  <div class="members">
+    <div class="wrap m-head">
+      <div class="reveal">
+        <span class="eyebrow">Déjà sur <span class="h" style="margin-left:-4px">Honey</span></span>
+        <h2 style="margin-top:16px">Les instituts qui <em>nous font confiance.</em></h2>
+      </div>
+      <div class="arrows" role="group" aria-label="Faire défiler les instituts">
+        <button id="prev" aria-label="Précédent" type="button"><svg><use href="#left"/></svg></button>
+        <button id="next" aria-label="Suivant" type="button"><svg><use href="#arrow"/></svg></button>
+      </div>
+    </div>
+    <div class="track" id="track" tabindex="0" aria-label="Instituts membres">
+      <a class="card" href="#app"><img src="img/salon-prestige.jpg" alt="Salon Prestige" loading="lazy"><div class="info"><div><h3>Salon Prestige</h3><small>Kinshasa</small></div></div></a>
+      <a class="card" href="#app"><img src="img/beaute-ngaliema.jpg" alt="Beauté Ngaliema" loading="lazy"><div class="info"><div><h3>Beauté Ngaliema</h3><small>Ngaliema</small></div></div></a>
+      <a class="card" href="#app"><img src="img/salon-jumeaux.jpg" alt="Salon les jumeaux" loading="lazy"><div class="info"><div><h3>Salon les jumeaux</h3><small>Kinshasa</small></div></div></a>
+      <a class="card join" href="#pro"><div><h3>Ton institut ici.</h3><p>Rejoins <span class="h" style="color:var(--honey-lt)">Honey</span> et gagne du <span class="t" style="color:var(--honey-lt)">temps</span> sur ton agenda.</p><span class="btn btn-light">Découvrir Pro <svg><use href="#arrow"/></svg></span></div></a>
+    </div>
+  </div>
+
+  <div class="mosaic-s"><div class="wrap">
+    <div class="mosaic-h reveal"><span class="eyebrow">Ton style</span><h2>Tout ce que tu aimes, <em>au même endroit.</em></h2></div>
+    <div class="mosaic">
+      <figure class="tile t1 reveal"><img src="img/braids4.jpg" alt="Tresses vues de dos" loading="lazy"><span>Tresses</span></figure>
+      <figure class="tile t2 arc reveal" style="--d:80ms"><img src="img/afro.jpg" alt="Coupe afro avec barbe" loading="lazy"><span>Barbier</span></figure>
+      <figure class="tile t3 reveal" style="--d:160ms"><img src="img/nails.jpg" alt="Pose d'ongles" loading="lazy"><span>Manucure</span></figure>
+      <figure class="tile t4 reveal" style="--d:80ms"><img src="img/brown.jpg" alt="Lissage brun" loading="lazy"><span>Lissage</span></figure>
+      <figure class="tile t5 reveal" style="--d:160ms"><img src="img/green.jpg" alt="Ongles vert émeraude" loading="lazy"><span>Ongles</span></figure>
+      <figure class="tile t6 reveal"><img src="img/shampoo2.jpg" alt="Shampoing et massage" loading="lazy" style="object-position:60% 50%"><span>Soins</span></figure>
+    </div>
+  </div></div>
+
+  <div class="ribbon" aria-hidden="true"><div class="ribbon-track" id="ribbon">
+    <img src="img/bun.jpg" alt="" loading="lazy"><img src="img/fade.jpg" alt="" loading="lazy"><img src="img/waves.jpg" alt="" loading="lazy"><img src="img/pink.jpg" alt="" loading="lazy"><img src="img/orange.jpg" alt="" loading="lazy"><img src="img/bob.jpg" alt="" loading="lazy"><img src="img/clipper.jpg" alt="" loading="lazy"><img src="img/brown.jpg" alt="" loading="lazy">
+  </div></div>
+</section>
+
+<!-- APP -->
+<section class="page" data-page="app" id="p-app">
+  <div class="p-hero">
+    <div class="wrap p-grid">
+      <div>
+        <span class="eyebrow seq" style="--i:0">L'app <span class="h" style="margin-left:-4px">Honey</span></span>
+        <h1 class="seq" style="--i:1">Ton institut, <em>en quelques secondes.</em></h1>
+        <p class="l seq" style="--i:2">Découvre les instituts de Kinshasa, compare leurs prix en FC et leurs avis, puis réserve ton <span class="t">créneau</span>. Ton Crédit <span class="h">Honey</span> et tes <span class="t">rendez-vous</span> restent dans ton profil.</p>
+      </div>
+      <div class="stage seq" style="--i:3">
+        <div class="bubble b1"><img src="img/orange.jpg" alt=""></div>
+        <div class="bubble b2"><img src="img/green.jpg" alt=""></div>
+        <div class="bubble b3"><img src="img/shampoo.jpg" alt=""></div>
+        <div class="phone" aria-hidden="true">
+          <div class="notch"></div>
+          <div class="scr">
+            <div class="ph-top"><span>9:41</span><span></span></div>
+            <div class="credit"><small>Crédit Honey</small><b>2250 FC</b></div>
+            <div class="note">Tes réservations offertes sont utilisées</div>
+            <div class="mini"><div>Rendez-vous · 1</div><div>Notifications</div></div>
+            <div class="tabbar"><span>Accueil</span><span>Recherche</span><span>Rendez-vous</span><span class="on">Profil</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feat has-marks">
+    <div class="wrap">
+      <div class="feat-h reveal"><span class="eyebrow">Trois gestes</span><h2>Découvre. Compare. <em>Fais ta réservation.</em></h2></div>
+      <div class="feats">
+        <article class="f reveal"><span class="n">01</span><div><h3>Découvre</h3><p>Coiffure, esthétique, manucure : parcours les instituts de ton quartier avec leurs vraies photos.</p></div></article>
+        <article class="f reveal" style="--d:100ms"><span class="n">02</span><div><h3>Compare</h3><p>Prix en FC, avis de clients et <span class="t">prochains créneaux libres</span>, côte à côte.</p></div></article>
+        <article class="f reveal" style="--d:200ms"><span class="n">03</span><div><h3>Réserve</h3><p>Choisis ton <span class="t">heure</span>, c'est confirmé en <span class="t">quelques secondes</span>. Profite de ta journée.</p></div></article>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap duo-img">
+    <figure class="ph-img reveal"><img src="img/shampoo2.jpg" alt="Shampoing et massage du cuir chevelu" loading="lazy"></figure>
+    <figure class="ph-img reveal" style="--d:120ms"><img src="img/mirrors.jpg" alt="Salon de coiffure avec grands miroirs" loading="lazy"></figure>
+  </div>
+
+  <div class="lit-sec" style="padding-top:0"><div class="wrap"><p class="lit">Ton <span class="t">temps</span> est précieux. Avec <span class="h">Honey</span>, il reste à toi.</p></div></div>
+</section>
+
+<!-- PRO -->
+<section class="page" data-page="pro" id="p-pro">
+  <div class="pro dark has-marks">
+    <div class="wrap p-grid">
+      <div>
+        <span class="eyebrow seq" style="--i:0">Honey Pro</span>
+        <h1 class="seq" style="--i:1">Ta <span class="t">journée,</span> <em>ton institut.</em></h1>
+        <p class="l seq" style="--i:2">Les demandes, l'<span class="t">agenda</span>, l'équipe et les recettes au même endroit. Et si le réseau coupe, ton <span class="t">agenda reste</span> lisible.</p>
+        <div class="cta-row seq" style="--i:3"><button class="net" id="net" aria-pressed="false" type="button"><span id="netlabel">Coupe le réseau</span><span class="sw"></span></button></div>
+      </div>
+      <div class="stage seq" style="--i:3">
+        <div class="bubble b1"><img src="img/mirrors.jpg" alt=""></div>
+        <div class="bubble b3"><img src="img/clipper.jpg" alt=""></div>
+        <div class="phone" id="proPhone" aria-hidden="true">
+          <div class="notch"></div>
+          <div class="off">Hors ligne. Les pages déjà ouvertes restent lisibles.</div>
+          <div class="agenda">
+            <div class="brand-row"><span class="lg"><svg><use href="#mark"/></svg>Honey <small style="font:700 7px var(--f-body);letter-spacing:.2em">PRO</small></span><span>Beauté Ngaliema</span></div>
+            <div class="scr-h" style="margin:12px 0 0">Votre journée</div>
+            <div class="days"><span>LUN<b>9</b></span><span>MAR<b>10</b></span><span class="on">MER<b>11</b></span><span>JEU<b>12</b></span><span>VEN<b>13</b></span><span>SAM<b>14</b></span><span>DIM<b>15</b></span></div>
+            <div class="kpi"><div>Rendez-vous<b>6</b></div><div>Recette prévue<b>85 000 FC</b></div></div>
+            <div class="appt"><time>09:00</time><div><b>Tresses</b><small>Betty</small></div></div>
+            <div class="appt"><time>10:30</time><div><b>Soin du visage</b><small>Deborah</small></div></div>
+            <div class="appt"><time>14:00</time><div><b>Brushing</b><small>Betty</small></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feat has-marks">
+    <div class="wrap">
+      <div class="feat-h reveal"><span class="eyebrow">Pour ton équipe</span><h2>Moins d'appels, plus de <span class="t">temps</span> <em>pour tes clients.</em></h2></div>
+      <div class="feats">
+        <article class="f reveal"><span class="n">01</span><div><h3>Demandes</h3><p>Tes clients réservent un <span class="t">créneau libre</span> eux-mêmes. Tu n'as plus qu'à accepter.</p></div></article>
+        <article class="f reveal" style="--d:100ms"><span class="n">02</span><div><h3>Agenda</h3><p>La <span class="t">journée</span> de toute l'équipe d'un coup d'œil, même sans réseau.</p></div></article>
+        <article class="f reveal" style="--d:200ms"><span class="n">03</span><div><h3>Recettes</h3><p>Tes recettes prévues en FC, jour après jour, sans calculs.</p></div></article>
+      </div>
+    </div>
+  </div>
+
+  <div class="join-s" id="rejoindre">
+    <div class="wrap two">
+      <div class="reveal">
+        <span class="eyebrow">Si tu es partant</span>
+        <h2>Parle-nous de <em>ton institut.</em></h2>
+        <p>Laisse-nous quelques informations, on te recontacte pour la suite. C'est rapide.</p>
+      </div>
+      <form id="form" class="reveal" novalidate>
+        <input class="hp" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <label for="nom">Nom de l'institut<input id="nom" name="nom" placeholder="Ex. Beauté Ngaliema" required></label>
+        <label for="quartier">Quartier<input id="quartier" name="quartier" placeholder="Gombe, Limete…" required></label>
+        <div class="row2">
+          <label for="tel">Téléphone<input id="tel" name="tel" type="tel" inputmode="tel" placeholder="+243 …" required></label>
+          <label for="mail">E-mail <span class="opt">(facultatif)</span><input id="mail" name="mail" type="email" placeholder="toi@exemple.com"></label>
+        </div>
+        <button class="btn btn-dark" type="submit" style="width:100%">Envoyer <svg><use href="#arrow"/></svg></button>
+        <div class="okmsg" id="ok" role="status">Merci. Ta demande est bien partie. L'équipe <span class="h">Honey</span> te recontacte.</div>
+        <div class="okmsg err" id="err" role="alert">Ta demande n'a pas pu partir. Écris-nous directement : <a href="mailto:honeyentreprise09@gmail.com" style="text-decoration:underline">honeyentreprise09@gmail.com</a></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="launch dark has-marks">
+    <div class="wrap">
+      <h2>Gagne du <span class="t">temps</span>, <em>dès aujourd'hui.</em></h2>
+      <p>Ton agenda, ton équipe, tes recettes. Tout est prêt.</p>
+      <a class="btn btn-light btn-xl" href="https://honey-pro-ten.vercel.app/connexion" target="_blank" rel="noopener">Lance-toi <svg><use href="#arrow"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- A PROPOS -->
+<section class="page" data-page="apropos" id="p-apropos">
+  <div class="about-h has-marks">
+    <div class="wrap">
+      <span class="eyebrow seq" style="--i:0">Notre histoire</span>
+      <h1 class="seq" style="--i:1">Structurer et valoriser la beauté <em>à Kinshasa.</em></h1>
+    </div>
+  </div>
+  <div class="story-b">
+    <div class="wrap two">
+      <figure class="ph-img reveal"><img src="img/braids4.jpg" alt="Tresses vues de dos" loading="lazy"></figure>
+      <div class="reveal">
+        <span class="eyebrow">Pourquoi <span class="h" style="margin-left:-4px">Honey</span></span>
+        <h2>Un constat <em>très simple.</em></h2>
+        <p>À Kinshasa, trouver un bon institut, connaître ses prix et savoir quand il est libre prend trop de <span class="t">temps</span>. Les instituts, eux, perdent des heures au téléphone.</p>
+        <p><span class="h">Honey</span> réunit les deux au même endroit : les clients découvrent, comparent et réservent, les instituts gèrent leur <span class="t">journée</span>. Chacun gagne un <span class="t">temps</span> précieux.</p>
+      </div>
+    </div>
+  </div>
+  <div class="goals has-marks">
+    <div class="wrap">
+      <span class="eyebrow">Nos objectifs</span>
+      <h2>Trois promesses <em>pour Kinshasa.</em></h2>
+      <div class="goal-grid">
+        <div class="goal reveal"><span class="n">01</span><h3>Structurer</h3><p>Donner aux instituts des outils simples : agenda, équipe, recettes.</p></div>
+        <div class="goal reveal" style="--d:100ms"><span class="n">02</span><h3>Valoriser</h3><p>Mettre en lumière le savoir-faire de chaque institut, avec ses photos, ses prix et ses avis.</p></div>
+        <div class="goal reveal" style="--d:200ms"><span class="n">03</span><h3>Gagner du <span class="t">temps</span></h3><p>Un <span class="t">créneau libre</span> se réserve en <span class="t">quelques secondes</span>. Le reste de ta journée est à toi.</p></div>
+      </div>
+      <div class="strip">
+        <figure class="ph-img reveal"><img src="img/afro.jpg" alt="" loading="lazy"></figure>
+        <figure class="ph-img reveal" style="--d:100ms"><img src="img/nails.jpg" alt="" loading="lazy"></figure>
+        <figure class="ph-img reveal" style="--d:200ms"><img src="img/bun.jpg" alt="" loading="lazy"></figure>
+      </div>
+    </div>
+  </div>
+  <div class="lit-sec" style="text-align:center"><div class="wrap"><p class="lit" style="margin:0 auto">Ton <span class="t">temps</span> compte. Celui de ton institut aussi. <em>Grandissons ensemble.</em></p></div></div>
+</section>
+
+<!-- CONTACT -->
+<section class="page" data-page="contact" id="p-contact">
+  <div class="c-hero"><div class="wrap">
+    <span class="eyebrow seq" style="--i:0">Contact</span>
+    <h1 class="seq" style="--i:1">On est là <em>pour toi.</em></h1>
+  </div></div>
+  <div class="wrap faq">
+    <span class="eyebrow">Questions fréquentes</span>
+    <h2>Tu te demandes <em>peut-être…</em></h2>
+    <details><summary>Comment réserver un créneau ?</summary><p>Choisis un institut, regarde ses créneaux libres, sélectionne ton <span class="t">heure</span> et confirme. C'est fait en <span class="t">quelques secondes</span>.</p></details>
+    <details><summary>Où retrouver mes rendez-vous ?</summary><p>Tes <span class="t">rendez-vous</span> et ton Crédit <span class="h">Honey</span> restent dans ton profil, dans l'app.</p></details>
+    <details><summary>Les prix sont-ils affichés ?</summary><p>Oui. Les prix sont affichés en FC pour chaque prestation, avant que tu réserves.</p></details>
+    <details><summary>Mon institut peut-il rejoindre Honey ?</summary><p>Bien sûr. Rends-toi sur la page Pro, laisse-nous quelques informations et on te recontacte.</p></details>
+  </div>
+
+  <div class="wrap c-form">
+    <div class="two">
+      <div>
+        <span class="eyebrow">Écris-nous</span>
+        <h2>Dis-nous <em>tout.</em></h2>
+        <p>Laisse ton message et un moyen de te joindre. On te répond dès que possible.</p>
+      </div>
+      <form id="form2" novalidate>
+        <input class="hp" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <label for="c-nom">Ton nom<input id="c-nom" name="nom" placeholder="Ton prénom et ton nom" required></label>
+        <label for="c-contact">Téléphone ou e-mail<input id="c-contact" name="contact" placeholder="+243 … ou toi@exemple.com" required></label>
+        <label for="c-msg">Message<textarea id="c-msg" name="msg" placeholder="Comment pouvons-nous t'aider ?" required></textarea></label>
+        <button class="btn btn-dark" type="submit" style="width:100%">Envoyer le message <svg><use href="#arrow"/></svg></button>
+        <div class="okmsg" id="ok2" role="status">Merci. Ton message est bien parti. On te répond dès que possible.</div>
+        <div class="okmsg err" id="err2" role="alert">Ton message n'a pas pu partir. Écris-nous directement : <a href="mailto:honeyentreprise09@gmail.com" style="text-decoration:underline">honeyentreprise09@gmail.com</a></div>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <svg class="foot-mark" viewBox="0 0 40 40" aria-hidden="true"><use href="#mark"/></svg>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <a class="logo" href="#accueil" aria-label="Honey, accueil"><svg><use href="#mark"/></svg><span>Honey</span></a>
+        <p class="foot-tag">La beauté à Kinshasa, réunie au même endroit.</p>
+        <p class="foot-sub">Découvre, compare, réserve. Et profite de ta <span class="t">journée</span>.</p>
+      </div>
+      <div class="cols">
+        <div class="col"><h4>Explorer</h4><a href="#accueil">Accueil</a><a href="#app">App</a><a href="#pro">Pro</a><a href="#apropos">À propos</a></div>
+        <div class="col"><h4>Aide</h4><a href="#contact">Contact</a><a href="#contact">Questions fréquentes</a></div>
+      </div>
+    </div>
+    <div class="foot-legal"><a href="#" data-soon>Confidentialité</a><a href="#" data-soon>CGU</a><a href="#" data-soon>CGV</a><a href="#" data-soon>Cookies</a><a href="#" data-soon>Mentions légales</a></div>
+    <div class="foot-base"><span>© 2026 Honey</span><span>Fait avec soin à Kinshasa</span></div>
+  </div>
+  <div class="wordmark" aria-hidden="true">Honey</div>
+</footer>
+
+<script>
+(function(){
+  var d=document, root=d.documentElement;
+  root.classList.add('js');
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var nav=d.getElementById('nav');
+  var pages=[].slice.call(d.querySelectorAll('.page'));
+  var names=pages.map(function(p){return p.getAttribute('data-page')});
+
+  /* menu */
+  var b=d.getElementById('burger'), m=d.getElementById('menu');
+  function toggle(o){m.classList.toggle('open',o);b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Fermer le menu':'Ouvrir le menu')}
+  b.addEventListener('click',function(){toggle(!m.classList.contains('open'))});
+  m.addEventListener('click',function(e){if(e.target.closest('a'))toggle(false)});
+  /* dropdown */
+  var dd=d.getElementById('dd'), ddBtn=d.getElementById('ddBtn'), ddT=null;
+  function ddSet(o){dd.classList.toggle('open',o);ddBtn.setAttribute('aria-expanded',o)}
+  ddBtn.addEventListener('click',function(){ddSet(!dd.classList.contains('open'))});
+  dd.addEventListener('mouseenter',function(){clearTimeout(ddT);if(window.matchMedia('(hover:hover)').matches)ddSet(true)});
+  dd.addEventListener('mouseleave',function(){ddT=setTimeout(function(){ddSet(false)},160)});
+  dd.addEventListener('click',function(e){if(e.target.closest('.dd-panel a'))ddSet(false)});
+  d.addEventListener('click',function(e){if(!dd.contains(e.target))ddSet(false)});
+  d.addEventListener('keydown',function(e){if(e.key==='Escape'){toggle(false);ddSet(false)}});
+
+  /* reveal */
+  var io=null;
+  if('IntersectionObserver' in window){
+    io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -6% 0px'});
+  }
+  function prep(page){
+    if(!io)return;
+    var vh=window.innerHeight;
+    [].slice.call(page.querySelectorAll('.reveal')).forEach(function(el){
+      el.classList.remove('pre');
+      if(el.getBoundingClientRect().top>vh)el.classList.add('pre');
+      io.observe(el);
+    });
+  }
+
+  /* router */
+  var current='';
+  function route(){
+    var h=(location.hash||'').replace('#','');
+    if(names.indexOf(h)<0)h='accueil';
+    var changed=h!==current;
+    pages.forEach(function(p){p.classList.toggle('active',p.getAttribute('data-page')===h)});
+    [].slice.call(d.querySelectorAll('.links>a,.menu a,.dd-panel a')).forEach(function(a){a.classList.toggle('cur',a.getAttribute('href')==='#'+h)});
+    ddBtn.classList.toggle('cur',h==='app'||h==='pro');
+    current=h;
+    if(changed)window.scrollTo(0,0);
+    prep(d.querySelector('.page.active'));
+    fit();req();
+  }
+  window.addEventListener('hashchange',route);
+
+  /* brightening words */
+  var lits=[].slice.call(d.querySelectorAll('.lit'));
+  lits.forEach(function(el){
+    var tw=d.createTreeWalker(el,NodeFilter.SHOW_TEXT),nodes=[];
+    while(tw.nextNode())nodes.push(tw.currentNode);
+    nodes.forEach(function(n){
+      var fr=d.createDocumentFragment();
+      n.nodeValue.split(/(\s+)/).forEach(function(p){
+        if(!p)return;
+        if(/^\s+$/.test(p)){fr.appendChild(d.createTextNode(p));return}
+        var sp=d.createElement('span');sp.className='w';sp.textContent=p;fr.appendChild(sp);
+      });
+      n.parentNode.replaceChild(fr,n);
+    });
+    el._w=[].slice.call(el.querySelectorAll('.w'));
+  });
+  function updateLit(){
+    var vh=window.innerHeight, pg=d.querySelector('.page.active');
+    lits.forEach(function(el){
+      if(!pg.contains(el))return;
+      var r=el.getBoundingClientRect();
+      var p=reduce?1:Math.max(0,Math.min(1,(vh*.92-r.top)/(vh*.5)));
+      var n=Math.round(p*el._w.length);
+      el._w.forEach(function(w,i){w.classList.toggle('on',i<n)});
+    });
+  }
+
+  /* story + parallax */
+  var story=d.getElementById('story');
+  var sts=[].slice.call(d.querySelectorAll('.st'));
+  var scrs=[].slice.call(d.querySelectorAll('.story .scr'));
+  var bars=[].slice.call(d.querySelectorAll('#prog i'));
+  var arches=[].slice.call(d.querySelectorAll('.arch'));
+  var cur=-1, ticking=false;
+  function clamp(x){return Math.max(0,Math.min(1,x))}
+  function update(){
+    ticking=false;
+    var vh=window.innerHeight;
+    nav.classList.toggle('scrolled',window.scrollY>8);
+    updateLit();
+    if(current==='accueil'){
+      if(!reduce){
+        arches.forEach(function(a){
+          var r=a.getBoundingClientRect();
+          var c=(r.top+r.height/2-vh/2);
+          a.style.setProperty('--py',(c*parseFloat(a.getAttribute('data-speed'))*-1).toFixed(1)+'px');
+        });
+      }
+      var br=story.getBoundingClientRect();
+      var tp=clamp(-br.top/(br.height-vh));
+      var i=Math.min(2,Math.floor(tp*3));
+      if(i!==cur){cur=i;
+        sts.forEach(function(e,k){e.classList.toggle('on',k===i)});
+        scrs.forEach(function(e,k){e.classList.toggle('on',k===i)});}
+      bars.forEach(function(bar,k){bar.style.setProperty('--p',clamp(tp*3-k).toFixed(3))});
+    }
+  }
+  function req(){if(!ticking){ticking=true;requestAnimationFrame(update)}}
+  window.addEventListener('scroll',req,{passive:true});window.addEventListener('resize',function(){fit();req()});
+
+  /* phone fit + background marks */
+  var slot=d.getElementById('pwSlot');
+  function fit(){if(!slot)return;var h=slot.clientHeight,w=slot.clientWidth;if(!h)return;slot.style.setProperty('--s',Math.max(.5,Math.min(1,(h-4)/560,(w-4)/276)).toFixed(3))}
+  function addMarks(host,count,seed0){
+    var seed=seed0;var rnd=function(){seed=(seed*9301+49297)%233280;return seed/233280};
+    for(var i=0;i<count;i++){var n=d.createElementNS('http://www.w3.org/2000/svg','svg');var sz=14+Math.floor(rnd()*16);
+      n.setAttribute('width',sz);n.setAttribute('height',sz);n.setAttribute('aria-hidden','true');
+      n.style.left=(rnd()*94+1).toFixed(1)+'%';n.style.top=(rnd()*92+2).toFixed(1)+'%';
+      n.style.animationDelay=(-rnd()*14).toFixed(1)+'s';n.style.opacity=(.07+rnd()*.07).toFixed(2);
+      n.innerHTML='<use href="#mark"/>';host.appendChild(n);}
+  }
+  var mk=d.getElementById('marks');
+  if(mk)addMarks(mk,18,7);
+  [].slice.call(d.querySelectorAll('.has-marks')).forEach(function(h,i){
+    var layer=d.createElement('div');layer.className='marks';layer.setAttribute('aria-hidden','true');
+    h.insertBefore(layer,h.firstChild);addMarks(layer,16,11+i*5);
+  });
+
+  /* ribbon: duplicate for seamless loop */
+  var rb=d.getElementById('ribbon');
+  if(rb){rb.innerHTML=rb.innerHTML+rb.innerHTML}
+
+  /* carousel */
+  var tr=d.getElementById('track');
+  function step(dir){var c=tr.querySelector('.card');tr.scrollBy({left:dir*(c.offsetWidth+16),behavior:reduce?'auto':'smooth'})}
+  d.getElementById('prev').addEventListener('click',function(){step(-1)});
+  d.getElementById('next').addEventListener('click',function(){step(1)});
+  tr.addEventListener('keydown',function(e){if(e.key==='ArrowRight'){step(1);e.preventDefault()}if(e.key==='ArrowLeft'){step(-1);e.preventDefault()}});
+
+  /* offline demo */
+  var net=d.getElementById('net'), pp=d.getElementById('proPhone'), lab=d.getElementById('netlabel');
+  net.addEventListener('click',function(){
+    var off=net.getAttribute('aria-pressed')!=='true';
+    net.setAttribute('aria-pressed',off);pp.classList.toggle('offline',off);
+    lab.textContent=off?'Rétablis le réseau':'Coupe le réseau';
+  });
+
+  /* forms: sent by e-mail through FormSubmit */
+  var MAIL='honeyentreprise09@gmail.com';
+  d.addEventListener('click',function(e){var a=e.target.closest('a[data-soon]');if(a)e.preventDefault()});
+  function wire(id,okId,errId,fields,subject){
+    var f=d.getElementById(id), ok=d.getElementById(okId), er=d.getElementById(errId);
+    var btn=f.querySelector('button[type="submit"]'), label=btn.innerHTML;
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      ok.classList.remove('show');er.classList.remove('show');
+      var bad=false;
+      fields.forEach(function(n){var i=f[n];var empty=!i.value.trim();i.style.borderColor=empty?'#B3261E':'';if(empty)bad=true});
+      if(bad||f._honey.value)return;
+      var data={_subject:subject,_template:'table',_captcha:'false'};
+      [].slice.call(f.elements).forEach(function(el){if(el.name&&el.name!=='_honey'&&el.value.trim())data[el.name]=el.value.trim()});
+      btn.disabled=true;btn.textContent='Envoi en cours…';
+      fetch('https://formsubmit.co/ajax/'+MAIL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
+        .then(function(r){return r.json()})
+        .then(function(j){if(j&&(j.success===true||j.success==='true')){f.reset();ok.classList.add('show')}else{er.classList.add('show')}})
+        .catch(function(){er.classList.add('show')})
+        .then(function(){btn.disabled=false;btn.innerHTML=label});
+    });
+  }
+  wire('form','ok','err',['nom','quartier','tel'],'Honey : demande d\'un institut');
+  wire('form2','ok2','err2',['nom','contact','msg'],'Honey : message depuis le site');
+
+  route();
+  setTimeout(fit,300);
+})();
+</script>
+</body>
+</html>
